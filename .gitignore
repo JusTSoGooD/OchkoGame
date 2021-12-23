@@ -1,0 +1,7 @@
+# IDE-s files
+.idea
+.vs
+
+# Builded files
+bin
+obj
