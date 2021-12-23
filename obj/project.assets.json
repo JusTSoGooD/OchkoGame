@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kuchm\\source\\repos\\ConsoleApp8\\ConsoleApp8.csproj",
-      "projectName": "ConsoleApp8",
-      "projectPath": "C:\\Users\\kuchm\\source\\repos\\ConsoleApp8\\ConsoleApp8.csproj",
+      "projectUniqueName": "C:\\Users\\kuchm\\Desktop\\Программы c#\\Ochko\\OchkoGame\\OchkoGame.csproj",
+      "projectName": "OchkoGame",
+      "projectPath": "C:\\Users\\kuchm\\Desktop\\Программы c#\\Ochko\\OchkoGame\\OchkoGame.csproj",
       "packagesPath": "C:\\Users\\kuchm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kuchm\\source\\repos\\ConsoleApp8\\obj\\",
+      "outputPath": "C:\\Users\\kuchm\\Desktop\\Программы c#\\Ochko\\OchkoGame\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

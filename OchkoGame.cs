@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Card;
+using static Player;
 
 namespace MyApp
 {
-    public class Program
+    public class OchkoGame
     {
         public static void Main(string[] args)
         {
             //Создание колоды в 4 масти, используя метод CardEditor
             List<Card> deck = new List<Card>();
-            string CardSuit = "червей";
-            CardEditor(deck, CardSuit);
-            CardSuit = "бубей";
-            CardEditor(deck, CardSuit);
-            CardSuit = "пик";
-            CardEditor(deck, CardSuit);
-            CardSuit = "крести";
-            CardEditor(deck, CardSuit);
-
+            //заполнение колоды двумя методами
+            AddDifferentCardSuitsToDeck(deck);
             //Вызов игрового модуля
-            PlayingModule(deck);
-
+            OchkoPlaying(deck);
             Console.ReadKey();
         }
-        //переменная isdeckshort создана для возможности игры колодой из 36 карт
         //Метод для создания колоды (задает численное значение и номинал карты)
-        public static void CardEditor(List<Card> methodDeckName, string methodCardSuit, bool isdeckshort = false)
+        public static void AddDifferentCardsToDeck (List<Card> methodDeckName, string methodCardSuit)
         {
             methodDeckName.Add(new Card() { Rank = "двойка", Suit = methodCardSuit, NumValue = 2 });
             methodDeckName.Add(new Card() { Rank = "тройка", Suit = methodCardSuit, NumValue = 3 });
@@ -42,8 +35,19 @@ namespace MyApp
             methodDeckName.Add(new Card() { Rank = "король", Suit = methodCardSuit, NumValue = 4 });
             methodDeckName.Add(new Card() { Rank = "туз", Suit = methodCardSuit, NumValue = 11 });
         }
+        public static void AddDifferentCardSuitsToDeck (List <Card> methodDeckName)
+        {
+            string CardSuit = "червей";
+            AddDifferentCardsToDeck(methodDeckName, CardSuit);
+            CardSuit = "бубей";
+            AddDifferentCardsToDeck(methodDeckName, CardSuit);
+            CardSuit = "пик";
+            AddDifferentCardsToDeck(methodDeckName, CardSuit);
+            CardSuit = "крести";
+            AddDifferentCardsToDeck(methodDeckName, CardSuit);
+        }
         //Игровой модуль
-        public static void PlayingModule(List<Card> methodDeckName)
+        public static void OchkoPlaying(List<Card> methodDeckName)
         {
             //рандомизация раздач
             Random rng = new Random();
@@ -52,7 +56,6 @@ namespace MyApp
             int playerScore = 0;
             while (true)
             {
-                
                 int randomDeckCardNumber = rng.Next(methodDeckName.Count);
                 Console.WriteLine($"Ваша карта {methodDeckName[randomDeckCardNumber].Rank} {methodDeckName[randomDeckCardNumber].Suit}");
                 playerScore = playerScore + methodDeckName[randomDeckCardNumber].NumValue;
@@ -68,20 +71,17 @@ namespace MyApp
                 }
                 methodDeckName.RemoveAt(randomDeckCardNumber);
                 Console.WriteLine($"Ваш текущий счет = {playerScore}");
-                if (!GetUserChoice(requestMessageTemplate))
+                if (!GettingUserChoice(requestMessageTemplate))
                 {
                     Console.WriteLine($"Игра завершена, ваш итоговый счет - {playerScore}");
-                    return;     
-                } 
-                
+                    return;
+                }
             }
         }
-        public static bool GetUserChoice(string requestMessage)
+        public static bool GettingUserChoice(string requestMessage)
         {
-           
             while (true)
             {
-
                 Console.WriteLine(requestMessage);
                 string userAnswer = Console.ReadLine();
                 if (userAnswer.ToLower() == "да")
@@ -100,60 +100,5 @@ namespace MyApp
 
         }
     }
-    public class Card
-    {
-        private string rank = "Undefined";
-        public string Rank
-        {
-            get
-            {
-                return rank;
-            }
-            set
-            {
-                rank = value;
-            }
-        }
-        private string suit = "Undefined";
-
-        public string Suit
-        {
-            get
-            {
-                return suit;
-            }
-            set
-            {
-                suit = value;
-            }
-        }
-        private int numvalue = 0;
-        public int NumValue
-        {
-            get
-            {
-                return numvalue;
-            }
-            set
-            {
-                numvalue = value;
-            }
-        }
-
-
-    }
-    public class Player
-    {
-        public string name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
-    }
 }
+

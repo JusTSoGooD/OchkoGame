@@ -1,0 +1,15 @@
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\bin\Debug\net6.0\OchkoGame.exe
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\bin\Debug\net6.0\OchkoGame.deps.json
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\bin\Debug\net6.0\OchkoGame.runtimeconfig.json
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\bin\Debug\net6.0\OchkoGame.dll
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\bin\Debug\net6.0\ref\OchkoGame.dll
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\bin\Debug\net6.0\OchkoGame.pdb
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.AssemblyInfoInputs.cache
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.AssemblyInfo.cs
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.csproj.CoreCompileInputs.cache
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.dll
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\ref\OchkoGame.dll
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.pdb
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.genruntimeconfig.cache
+C:\Users\kuchm\Desktop\Программы c#\Ochko\OchkoGame\obj\Debug\net6.0\OchkoGame.csproj.AssemblyReference.cache
