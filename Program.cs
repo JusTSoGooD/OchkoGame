@@ -50,15 +50,26 @@ namespace MyApp
             {
                 
                 int randomDeckCardNumber = rng.Next(methodDeckName.Count);
-                даConsole.WriteLine($"Ваша карта {methodDeckName[randomDeckCardNumber].Rank} {methodDeckName[randomDeckCardNumber].Suit}");
+                Console.WriteLine($"Ваша карта {methodDeckName[randomDeckCardNumber].Rank} {methodDeckName[randomDeckCardNumber].Suit}");
                 playerScore = playerScore + methodDeckName[randomDeckCardNumber].NumValue;
+                if (playerScore > 21)
+                {
+                    Console.WriteLine($"Вы проиграли, ваш итоговый счет - {playerScore}");
+                    return;
+                }
+                else if (playerScore == 21)
+                {
+                    Console.WriteLine("Вы победили, набрав 21 очко (молодец нахуй)");
+                    return;
+                }
                 methodDeckName.RemoveAt(randomDeckCardNumber);
                 Console.WriteLine($"Ваш текущий счет = {playerScore}");
                 if (!GetUserChoice(requestMessageTemplate))
                 {
                     Console.WriteLine($"Игра завершена, ваш итоговый счет - {playerScore}");
                     return;     
-                }
+                } 
+                
             }
         }
         public static bool GetUserChoice(string requestMessage)
