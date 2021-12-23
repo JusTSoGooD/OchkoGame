@@ -8,7 +8,7 @@ namespace MyApp
     {
         public static void Main(string[] args)
         {
-
+            //Создание колоды в 4 масти, используя метод CardEditor
             List<Card> deck = new List<Card>();
             string CardSuit = "червей";
             CardEditor(deck, CardSuit);
@@ -19,12 +19,13 @@ namespace MyApp
             CardSuit = "крести";
             CardEditor(deck, CardSuit);
 
-            //Console.WriteLine($"Ваша карта {deck[51].Rank} {deck[51].Suit}");
+            //Вызов игрового модуля
             PlayingModule(deck);
 
             Console.ReadKey();
         }
         //переменная isdeckshort создана для возможности игры колодой из 36 карт
+        //Метод для создания колоды (задает численное значение и номинал карты)
         public static void CardEditor(List<Card> methodDeckName, string methodCardSuit, bool isdeckshort = false)
         {
             methodDeckName.Add(new Card() { Rank = "двойка", Suit = methodCardSuit, NumValue = 2 });
@@ -41,9 +42,12 @@ namespace MyApp
             methodDeckName.Add(new Card() { Rank = "король", Suit = methodCardSuit, NumValue = 4 });
             methodDeckName.Add(new Card() { Rank = "туз", Suit = methodCardSuit, NumValue = 11 });
         }
+        //Игровой модуль
         public static void PlayingModule(List<Card> methodDeckName)
         {
+            //рандомизация раздач
             Random rng = new Random();
+            //пример предложения о вытягивании карты
             string requestMessageTemplate = "Хотите ли вы вытянуть еще одну карту?";
             int playerScore = 0;
             while (true)
