@@ -3,141 +3,123 @@ using System.Collections.Generic;
 using System.Linq;
 using static Card;
 using static Player;
-
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.IO;
 namespace MyApp
 {
     public class OchkoGame
     {
         public static void Main(string[] args)
         {
-            //Создание колоды в 4 масти, используя метод CardEditor
-            List<Card> deck = new List<Card>();
-            //заполнение колоды двумя методами
-            AddDifferentCardSuitsToDeck(deck);
+            List<Card> deck = GenerateDeck();
             OchkoPlaying(deck);
-
             Console.ReadKey();
         }
+
+
         //Метод для создания колоды (задает численное значение и номинал карты)
-        public static void AddDifferentCardsToDeck(List<Card> methodDeckName, string methodCardSuit)
+        public static void AddCardsToDeckBySuit(List<Card> deck, string cardSuit)
         {
-            methodDeckName.Add(new Card() { Rank = "двойка", Suit = methodCardSuit, NumValue = 2 });
-            methodDeckName.Add(new Card() { Rank = "тройка", Suit = methodCardSuit, NumValue = 3 });
-            methodDeckName.Add(new Card() { Rank = "четверка", Suit = methodCardSuit, NumValue = 4 });
-            methodDeckName.Add(new Card() { Rank = "пятерка", Suit = methodCardSuit, NumValue = 5 });
-            methodDeckName.Add(new Card() { Rank = "шестерка", Suit = methodCardSuit, NumValue = 6 });
-            methodDeckName.Add(new Card() { Rank = "семерка", Suit = methodCardSuit, NumValue = 7 });
-            methodDeckName.Add(new Card() { Rank = "восьмерка", Suit = methodCardSuit, NumValue = 8 });
-            methodDeckName.Add(new Card() { Rank = "девятка", Suit = methodCardSuit, NumValue = 9 });
-            methodDeckName.Add(new Card() { Rank = "десятка", Suit = methodCardSuit, NumValue = 10 });
-            methodDeckName.Add(new Card() { Rank = "валет", Suit = methodCardSuit, NumValue = 2 });
-            methodDeckName.Add(new Card() { Rank = "дама", Suit = methodCardSuit, NumValue = 3 });
-            methodDeckName.Add(new Card() { Rank = "король", Suit = methodCardSuit, NumValue = 4 });
-            methodDeckName.Add(new Card() { Rank = "туз", Suit = methodCardSuit, NumValue = 11 });
+            deck.Add(new Card("двойка", cardSuit, 2));
+            deck.Add(new Card("тройка", cardSuit, 3));
+            deck.Add(new Card("четверка", cardSuit, 4));
+            deck.Add(new Card("пятерка", cardSuit, 5));
+            deck.Add(new Card("шестерка", cardSuit, 6));
+            deck.Add(new Card("семерка", cardSuit, 7));
+            deck.Add(new Card("восьмерка", cardSuit, 8));
+            deck.Add(new Card("девятка", cardSuit, 9));
+            deck.Add(new Card("десятка", cardSuit, 10));
+            deck.Add(new Card("валет", cardSuit, 2));
+            deck.Add(new Card("дама", cardSuit, 3));
+            deck.Add(new Card("король", cardSuit, 4));
+            deck.Add(new Card("туз", cardSuit, 11));
         }
-        public static void AddDifferentCardSuitsToDeck(List<Card> methodDeckName)
+
+
+        //метод для процесса формирования мастей карт
+        public static List<Card> GenerateDeck()
         {
-            string CardSuit = "червей";
-            AddDifferentCardsToDeck(methodDeckName, CardSuit);
-            CardSuit = "бубей";
-            AddDifferentCardsToDeck(methodDeckName, CardSuit);
-            CardSuit = "пик";
-            AddDifferentCardsToDeck(methodDeckName, CardSuit);
-            CardSuit = "крести";
-            AddDifferentCardsToDeck(methodDeckName, CardSuit);
+            List<Card> deck = new List<Card>();
+            AddCardsToDeckBySuit(deck, "червей");
+            AddCardsToDeckBySuit(deck, "бубей");
+            AddCardsToDeckBySuit(deck, "пик");
+            AddCardsToDeckBySuit(deck, "крести");
+            return deck;
         }
+
+
         //Метод для процесса вытягивания карт
-        public static void DrawCards(List<Card> methodDeckName, List<Player> PlayersList, int CycleCounter)
+        public static void DrawCards(List<Card> deck, List<Player> PlayersList, int CycleCounter)
         {
             Random rng = new Random();
-            int randomDeckCardNumber = rng.Next(methodDeckName.Count);
-            Console.WriteLine($"{PlayersList[CycleCounter].Name}, ваша карта {methodDeckName[randomDeckCardNumber].Rank} {methodDeckName[randomDeckCardNumber].Suit}");
-            PlayersList[CycleCounter].Score = PlayersList[CycleCounter].Score + methodDeckName[randomDeckCardNumber].NumValue;
-            methodDeckName.RemoveAt(randomDeckCardNumber);
+            int randomDeckCardNumber = rng.Next(deck.Count);
+            Console.WriteLine($"{PlayersList[CycleCounter].Name}, ваша карта {deck[randomDeckCardNumber].Rank} {deck[randomDeckCardNumber].Suit}");
+            PlayersList[CycleCounter].Score = PlayersList[CycleCounter].Score + deck[randomDeckCardNumber].Value;
+            deck.RemoveAt(randomDeckCardNumber);
         }
+
+
         //Игровой модуль
-        public static void OchkoPlaying(List<Card> methodDeckName)
+        public static void OchkoPlaying(List<Card> deck)
         {
             //ввод пользователей в игру
             List<Player> players = new List<Player>();
-            List<Player> winnersList = new List<Player>();
-            Console.WriteLine("Введите количество игроков");
-            int playerCount = Convert.ToInt32(Console.ReadLine());
-            for (int i = 0; i <= playerCount - 1; i++)
+
+            string path = "D:/Projects/Train/Ed/OchkoGame/Users.xml";
+            if (!(File.Exists(path)))
             {
-                Console.WriteLine($"Введите имя {i + 1}-ого игрока");
-                winnersList.Add(new Player() { Name = Console.ReadLine() });
-                players.Add(new Player() { Name = winnersList[i].Name });
+                XmlDocument xNewPlayersDocument = new XmlDocument();
+                XmlDeclaration xmlDec = xNewPlayersDocument.CreateXmlDeclaration("1.0", "utf-8", null);
+                xNewPlayersDocument.AppendChild(xmlDec);
+                XmlElement playersDatabase = xNewPlayersDocument.CreateElement("Database");
+                playersDatabase.SetAttribute("name", "Игроки");
+                xNewPlayersDocument.AppendChild(playersDatabase);
+                xNewPlayersDocument.Save(path);
             }
-
-
-            //пример предложения о вытягивании карты
-            string requestMessageTemplate = ", хотите ли вы вытянуть еще одну карту?";
-            int playersInGame = playerCount;
-            for (int i = 0; i < playerCount; i++)
+            XmlDocument xPlayersDocument = new XmlDocument();
+            xPlayersDocument.Load(path);
+            int numberOfPlayers = GetNumberOfPlayers();
+            for (int i = 0; i <= numberOfPlayers - 1; i++)
             {
-                DrawCards(methodDeckName, players, i);
-            }
-            while (playersInGame >= 1)
-            {
-
-                for (int i = 0; i < playerCount; i++)
+                players.Add(new Player() { Name = GetUserName(i), IsPlayerInGame = true });
+                bool isPlayerExists = false;
+                XmlElement? xRoot = xPlayersDocument.DocumentElement;          
+                foreach (XmlElement xnode in xRoot)
                 {
-                    if (players[i].Score == 0)
+                    XmlNode? attr = xnode.Attributes.GetNamedItem("name");
+                    if (attr.Value == players[i].Name)
                     {
-                        continue;
+                        isPlayerExists = true;
+                        break;
                     }
-                    Console.WriteLine($"{players[i].Name}, ваш текущий счет = {players[i].Score}");
-                    if (!GettingUserChoice(players[i].Name, requestMessageTemplate))
-                    {
-                        Console.WriteLine($"{players[i].Name}, игра завершена, ваш итоговый счет - {players[i].Score}");
-
-                        winnersList[i].Score = players[i].Score;
-                        players[i].Score = 0;
-                        playersInGame = playersInGame - 1;
-                        continue;
-                    }
-                    DrawCards(methodDeckName, players, i);
-
-
-                    if (players[i].Score > 21)
-                    {
-                        Console.WriteLine($"{players[i].Name}, вы выбыли из игры, ваш итоговый счет - {players[i].Score}");
-                        winnersList[i].Score = 0;
-                        players[i].Score = 0;
-                        playersInGame = playersInGame - 1;
-                        continue;
-
-                    }
-                    else if (players[i].Score == 21)
-                    {
-                        Console.WriteLine($"{players[i].Name}, вы победили, набрав 21 очко (молодец нахуй)");
-                        Console.ReadKey();
-                        playersInGame = playersInGame - 1;
-                        winnersList[i].Score = 21;
-                        players[i].Score = 0;
-                        continue;
-
-                    }
-
-
-
+                }
+                if (!isPlayerExists)
+                {
+                    XmlElement player = xPlayersDocument.CreateElement("Игрок");
+                    player.SetAttribute("name", players[i].Name);
+                    player.SetAttribute("winCount", "Количество побед");
+                    xRoot.AppendChild(player);
                 }
             }
-            MassiveSorting(winnersList);
-            for (int i = 0; i < winnersList.Count; i++)
+
+            xPlayersDocument.Save(path);
+
+            for (int i = 0; i < numberOfPlayers; i++)
             {
-                Console.Write(winnersList[i].Score + " ");
+                DrawCards(deck, players, i);
             }
-            WithdrawingGameWinners(winnersList);
-
-
+            GameProcess(deck, players);
+            WithdrawingGameWinners(players);
         }
-        public static bool GettingUserChoice(string userName, string requestMessage)
+
+
+        //получение ответа о предложении продолжить игру
+        public static bool GetUserChoice(string appealToPLayer)
         {
             while (true)
             {
-                Console.WriteLine($"{userName}{requestMessage}");
+                Console.WriteLine(appealToPLayer);
                 string userAnswer = Console.ReadLine();
                 if (userAnswer.ToLower() == "да")
                 {
@@ -152,45 +134,101 @@ namespace MyApp
                     Console.WriteLine("Хуйню ввел, попробуй еще раз");
                 }
             }
-
         }
-        //сортировка массива
-        public static void MassiveSorting(List<Player> listName)
+
+
+        //вывод победителей игры
+        public static void WithdrawingGameWinners(List<Player> playersList)
         {
-            for (int i = 0; i < listName.Count - 1; i++)
+            int maxScore = playersList.Max(p => p.Score);
+            List<Player> winners = playersList.FindAll(p => p.Score == maxScore);
+            Console.WriteLine("Список победителей игры:");
+            foreach (Player winner in winners)
             {
-                for (int j = i + 1; j < listName.Count; j++)
+                Console.WriteLine($"{winner.Name}, набравший {winner.Score} баллов");
+            }
+        }
+
+
+        //Получение количества игроков
+        public static int GetNumberOfPlayers()
+        {
+            while (true)
+            {
+                Console.WriteLine("Введите количество игроков");
+                int playersNumber = Convert.ToInt32(Console.ReadLine());
+                if (playersNumber > 10)
                 {
-                    if (listName[i].Score < listName[j].Score)
+                    Console.WriteLine("Введите меньшее количество игроков");
+                }
+                else
+                {
+                    return playersNumber;
+                }
+            }
+        }
+        public static void GameProcess(List<Card> deck, List<Player> playersList)
+        {
+            int playersInGame = playersList.Count;
+            int numberOfPlayers = playersList.Count;
+            while (playersInGame >= 1)
+            {
+                for (int i = 0; i < numberOfPlayers; i++)
+                {
+                    Player actualPlayer = playersList[i];
+                    //пропуск выбывших/выигравших игроков
+                    if (!(actualPlayer.IsPlayerInGame))
                     {
-                        int temp = listName[i].Score;
-                        listName[i].Score = listName[j].Score;
-                        listName[j].Score = temp;
+                        continue;
+                    }
+                    Console.WriteLine($"\n{actualPlayer.Name}, ваш текущий счет = {actualPlayer.Score}");
+                    string requestMessageTemplate = $", хотите ли вы вытянуть еще одну карту?";
+                    //отказ от продолжения игры
+                    bool isNewCardNeeded = GetUserChoice($"{actualPlayer.Name}{requestMessageTemplate}");
+                    if (!isNewCardNeeded)
+                    {
+                        Console.WriteLine($"{actualPlayer.Name}, игра завершена, ваш итоговый счет - {actualPlayer.Score}");
+                        actualPlayer.IsPlayerInGame = false;
+                        playersInGame = playersInGame - 1;
+                        continue;
+                    }
+                    DrawCards(deck, playersList, i);
+                    if (actualPlayer.Score > 21)
+                    {
+                        Console.WriteLine($"{actualPlayer.Name}, вы выбыли из игры, ваш итоговый счет - {actualPlayer.Score}");
+                        actualPlayer.Score = 0;
+                        actualPlayer.IsPlayerInGame = false;
+                        playersInGame = playersInGame - 1;
+                        continue;
+                    }
+                    else if (actualPlayer.Score == 21)
+                    {
+                        Console.WriteLine($"{actualPlayer.Name}, вы победили, набрав 21 очко (молодец нахуй)");
+                        playersInGame = playersInGame - 1;
+                        actualPlayer.IsPlayerInGame = false;
+                        continue;
                     }
                 }
             }
         }
-        //вывод победителей игры
-        public static void WithdrawingGameWinners(List<Player> listname)
+
+        //Ввод имени пользователя
+        public static string GetUserName(int currentPlayerIndex)
         {
-            int i = 0;
+            string pattern = @"^([A-Z][a-z]*([ -][A-Z][a-z]*)*)$";
+            Regex rgx = new Regex(pattern);
             while (true)
             {
-                if (listname[i].Score == listname[i + 1].Score)
+                Console.WriteLine($"Введите имя {currentPlayerIndex + 1}-ого игрока");
+                string name = Console.ReadLine();
+                if (rgx.IsMatch(name))
                 {
-                    i++;
+                    return name;
                 }
                 else
                 {
-                    Console.WriteLine("Список победителей игры:");
-                    int winnersCount = 0;
-                    do
-                    {
-                        Console.WriteLine($"{listname[winnersCount].Name}, набравший {listname[winnersCount].Score} баллов");      //Знаю, что использовать do while нехорошо, но я очень хотел, 
-                        winnersCount++;                                                                                         //чтобы сначала выполнилось действие, а потом была проверка условия
-                    } while (winnersCount <= i);
-
-                    break;
+                    Console.WriteLine("Имя пользователя не может содержать цифры, " +
+                        "символы (кроме дефиса) а также должно начинаться с большой буквы");
                 }
             }
         }
