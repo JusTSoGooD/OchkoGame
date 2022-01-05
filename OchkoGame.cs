@@ -66,7 +66,7 @@ namespace MyApp
             //ввод пользователей в игру
             List<Player> players = new List<Player>();
 
-            string path = "D:/Projects/Train/Ed/OchkoGame/Users.xml";
+            string path = "C://Users/kuchm/Desktop/Программы c#/Ochko/OchkoGame/users.xml";
             if (!(File.Exists(path)))
             {
                 XmlDocument xNewPlayersDocument = new XmlDocument();
