@@ -98,7 +98,7 @@ namespace MyApp
                 {
                     XmlElement player = xPlayersDocument.CreateElement("Игрок");
                     player.SetAttribute("name", players[i].Name);
-                    player.SetAttribute("winCount", "Количество побед");
+                    player.SetAttribute("winCount", "0");
                     xRoot.AppendChild(player);
                 }
             }
@@ -140,11 +140,26 @@ namespace MyApp
         //вывод победителей игры
         public static void WithdrawingGameWinners(List<Player> playersList)
         {
+            string path = "C://Users/kuchm/Desktop/Программы c#/Ochko/OchkoGame/users.xml";
+            XmlDocument xPlayersDocument = new XmlDocument();
+            xPlayersDocument.Load(path);
+            XmlElement? xRoot = xPlayersDocument.DocumentElement;
+
             int maxScore = playersList.Max(p => p.Score);
             List<Player> winners = playersList.FindAll(p => p.Score == maxScore);
             Console.WriteLine("Список победителей игры:");
             foreach (Player winner in winners)
             {
+                foreach (XmlElement xnode in xRoot)
+                {
+                    XmlNode? attr = xnode.Attributes.GetNamedItem("name");
+                    if (attr.Value == winner.Name)
+                    {
+                        XmlNode? winnerCount = xnode.Attributes.GetNamedItem("winCount");
+                        winnerCount.Value = Convert.ToString(Convert.ToInt16(winnerCount.Value)+1);
+                        xPlayersDocument.Save(path);  
+                    }
+                }
                 Console.WriteLine($"{winner.Name}, набравший {winner.Score} баллов");
             }
         }
