@@ -13,6 +13,17 @@ namespace MyApp
             Console.ReadKey();
         }
 
+        public static void CreateXmlFile()
+        {
+            XmlDocument xNewPlayersDocument = new XmlDocument();
+            XmlDeclaration xmlDec = xNewPlayersDocument.CreateXmlDeclaration("1.0", "utf-8", null);
+            xNewPlayersDocument.AppendChild(xmlDec);
+            XmlElement playersDatabase = xNewPlayersDocument.CreateElement("Database");
+            playersDatabase.SetAttribute("name", "Игроки");
+            xNewPlayersDocument.AppendChild(playersDatabase);
+            xNewPlayersDocument.Save(path);
+        }
+
         //Игровой модуль
         public static void OchkoPlaying(List<Card> deck)
         {
@@ -20,21 +31,15 @@ namespace MyApp
 
             if (!File.Exists(path))
             {
-                XmlDocument xNewPlayersDocument = new XmlDocument();
-                XmlDeclaration xmlDec = xNewPlayersDocument.CreateXmlDeclaration("1.0", "utf-8", null);
-                xNewPlayersDocument.AppendChild(xmlDec);
-                XmlElement playersDatabase = xNewPlayersDocument.CreateElement("Database");
-                playersDatabase.SetAttribute("name", "Игроки");
-                xNewPlayersDocument.AppendChild(playersDatabase);
-                xNewPlayersDocument.Save(path);
+                CreateXmlFile();
             }
 
             XmlDocument xPlayersDocument = new XmlDocument();
             xPlayersDocument.Load(path);
             int numberOfPlayers = ConsoleIOManager.GetNumberOfPlayers();
-            for (int i = 0; i <= numberOfPlayers - 1; i++)
+            for (int i = 0; i < numberOfPlayers; i++)
             {
-                players.Add(new Player() { Name = ConsoleIOManager.GetUserName(i), IsPlayerInGame = true });
+                players.Add(new Player(ConsoleIOManager.GetUserName(i)));
                 bool isPlayerExists = false;
                 XmlElement? xRoot = xPlayersDocument.DocumentElement;
                 foreach (XmlElement xnode in xRoot)
@@ -61,6 +66,21 @@ namespace MyApp
             {
                 players[i].DrawCard(deck);
             }
+            GameProcess(deck, players);
+            DetermineWinners(players);
+        }
+
+        public static void OchkoPlayingWithoutXml(List<Card> deck)
+        {
+            List<Player> players = new List<Player>();
+            int numberOfPlayers = ConsoleIOManager.GetNumberOfPlayers();
+
+            for (int i = 0; i <= numberOfPlayers; i++)
+            {
+                players.Add(new Player(ConsoleIOManager.GetUserName(i)));
+            }
+
+            players.ForEach(player => player.DrawCard(deck));
             GameProcess(deck, players);
             DetermineWinners(players);
         }
