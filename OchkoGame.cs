@@ -62,7 +62,7 @@ namespace MyApp
                 players[i].DrawCard(deck);
             }
             GameProcess(deck, players);
-            WithdrawingGameWinners(players);
+            DetermineWinners(players);
         }
          
         //получение ответа о предложении продолжить игру
@@ -90,15 +90,19 @@ namespace MyApp
         }
 
         //вывод победителей игры
-        public static void WithdrawingGameWinners(List<Player> playersList)
-        {          
+        public static void DetermineWinners(List<Player> playersList)
+        {
+            List<Player> winners = GetPlayersWithHighestScore(playersList);
+            PrintWinnersToConsole(winners);
+            PrintWinnersToXml(winners);
+        }
+
+        public static void PrintWinnersToXml(List<Player> winners)
+        {
             XmlDocument xPlayersDocument = new XmlDocument();
             xPlayersDocument.Load(path);
             XmlElement? xRoot = xPlayersDocument.DocumentElement;
 
-            int maxScore = playersList.Max(p => p.Score);
-            List<Player> winners = playersList.FindAll(p => p.Score == maxScore);
-            Console.WriteLine("Список победителей игры:");
             foreach (Player winner in winners)
             {
                 foreach (XmlElement xnode in xRoot)
@@ -107,12 +111,23 @@ namespace MyApp
                     if (attr.Value == winner.Name)
                     {
                         XmlNode? winnerCount = xnode.Attributes.GetNamedItem("winCount");
-                        winnerCount.Value = Convert.ToString(Convert.ToInt16(winnerCount.Value)+1);
-                        xPlayersDocument.Save(path);  
+                        winnerCount.Value = Convert.ToString(Convert.ToInt16(winnerCount.Value) + 1);
+                        xPlayersDocument.Save(path);
                     }
                 }
-                Console.WriteLine($"{winner.Name}, набравший {winner.Score} баллов");
             }
+        }
+
+        public static void PrintWinnersToConsole(List<Player> winners)
+        {
+            Console.WriteLine("Список победителей игры:");
+            winners.ForEach(winner => Console.WriteLine($"{winner.Name}, набравший {winner.Score} баллов"));
+        }
+
+        public static List<Player> GetPlayersWithHighestScore(List<Player> playersList)
+        {
+            int maxScore = playersList.Max(p => p.Score);
+            return playersList.FindAll(p => p.Score == maxScore);
         }
 
         // TODO: Нет валидации пользовательского воода на символы кроме цифр.
