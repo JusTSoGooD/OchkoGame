@@ -4,13 +4,13 @@ public class CardManager
 {
     // TODO: Добавь возможность генерации колоды из 36 карт
     //метод для процесса формирования мастей карт
-    public static List<Card> GenerateDeck()
+    public static List<Card> GenerateDeck(bool isDeckLong)
     {
         List<Card> deck = new List<Card>();
-        AddCardsToDeckBySuit(deck, "червей");
-        AddCardsToDeckBySuit(deck, "бубей");
-        AddCardsToDeckBySuit(deck, "пик");
-        AddCardsToDeckBySuit(deck, "крести");
+        AddCardsToDeckBySuit(deck, "червей", isDeckLong);
+        AddCardsToDeckBySuit(deck, "бубей", isDeckLong);
+        AddCardsToDeckBySuit(deck, "пик", isDeckLong);
+        AddCardsToDeckBySuit(deck, "крести", isDeckLong);
         return deck;
     }
 
@@ -24,12 +24,15 @@ public class CardManager
     }
 
     //Метод для создания колоды (задает численное значение и номинал карты)
-    private static void AddCardsToDeckBySuit(List<Card> deck, string cardSuit)
+    private static void AddCardsToDeckBySuit(List<Card> deck, string cardSuit, bool isDeckLong)
     {
-        deck.Add(new Card("двойка", cardSuit, 2));
-        deck.Add(new Card("тройка", cardSuit, 3));
-        deck.Add(new Card("четверка", cardSuit, 4));
-        deck.Add(new Card("пятерка", cardSuit, 5));
+        if (isDeckLong)
+        {
+            deck.Add(new Card("двойка", cardSuit, 2));
+            deck.Add(new Card("тройка", cardSuit, 3));
+            deck.Add(new Card("четверка", cardSuit, 4));
+            deck.Add(new Card("пятерка", cardSuit, 5));
+        }
         deck.Add(new Card("шестерка", cardSuit, 6));
         deck.Add(new Card("семерка", cardSuit, 7));
         deck.Add(new Card("восьмерка", cardSuit, 8));

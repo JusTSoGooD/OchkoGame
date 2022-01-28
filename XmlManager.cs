@@ -21,18 +21,15 @@ public class XmlManager
     public static void addPlayersToXml(List<Player> players)
     {
         XDocument? xDoc = XDocument.Load(fullPath);
-        XElement? xPlayersElement = xDoc.Descendants(rootElementName).First();
+        XElement? xPlayersElement = xDoc.Element(rootElementName);
 
         foreach (Player player in players)
         {
-            if (isPlayerExists(xPlayersElement, player))
-            {
-                increasePlayerStats(xPlayersElement, player, "Games");
-            }
-            else
+            if (!isPlayerExists(xPlayersElement, player))
             {
                 createPlayer(xPlayersElement, player);
             }
+            increasePlayerStats(xPlayersElement, player, "Games");
         }
 
         xDoc.Save(fullPath);
@@ -41,7 +38,7 @@ public class XmlManager
     public static void PrintWinners(List<Player> winners)
     {
         XDocument? xDoc = XDocument.Load(fullPath);
-        XElement? xPlayersElement = xDoc.Descendants(rootElementName).First();
+        XElement? xPlayersElement = xDoc.Elements(rootElementName).First();
 
         winners.ForEach(winner => increasePlayerStats(xPlayersElement, winner, "Wins"));
 
@@ -51,7 +48,7 @@ public class XmlManager
     private static void increasePlayerStats(XElement xPlayersElement, Player player, string fieldName)
     {
         XElement xPlayerElement = xPlayersElement.Elements(playerElementName)
-            .FirstOrDefault(p => p.Attribute("Name").Value == player.Name);
+            .First(p => p.Attribute("Name").Value == player.Name);
 
         int fieldOldValue = int.Parse(xPlayerElement.Element(fieldName).Value);
 
@@ -60,14 +57,14 @@ public class XmlManager
 
     private static bool isPlayerExists(XElement xPlayersElement, Player player)
     {
-        return xPlayersElement.Descendants(playerElementName)
+        return xPlayersElement.Elements(playerElementName)
             .Where(p => p.Attribute("Name").Value == player.Name).Any();
     }
 
     private static void createPlayer(XElement xPlayersElement, Player player)
     {
         XElement xPlayerElement = new XElement(playerElementName, new XAttribute("Name", player.Name));
-        XElement xPlayerGamesElement = new XElement("Games", 1);
+        XElement xPlayerGamesElement = new XElement("Games", 0);
         XElement xPlayerWinsElement = new XElement("Wins", 0);
 
         xPlayerElement.Add(xPlayerGamesElement, xPlayerWinsElement);

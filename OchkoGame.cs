@@ -4,28 +4,23 @@
     {
         public static void Main(string[] args)
         {
-            List<Card> deck = CardManager.GenerateDeck();
+            string appealToPlayer = "Хотите играть колодой из 52 карт? (при ответе нет будет сфоримрована колода 36)";
+            List<Card> deck = CardManager.GenerateDeck(ConsoleIOManager.GetUserChoice(appealToPlayer));
             OchkoPlaying(deck);
             Console.ReadKey();
         }
-
+        
         // Игровой модуль
         public static void OchkoPlaying(List<Card> deck)
         {
             XmlManager.CreateFile();
 
             List<Player> players = new List<Player>();
-            int numberOfPlayers = ConsoleIOManager.GetNumberOfPlayers();
-
-            // TODO: честно - хз на сколько вщ грамотно так писать. Думаю, что не очень.
-            // TODO: Но я сейчас активно разбираюсь с LINQ, поэтому стараюсь все, что только можно писать с его помощью, практики ради.
-            // TODO: Ну и тебе полезно будет знать, что такая гразь тоже возможна, и она вполне себе работает)
-            // TODO: Ниже оставлю закомменченным код, который делает все то же самое, но по-человечески))
-            players = Enumerable.Range(0, numberOfPlayers).Select(i => new Player(ConsoleIOManager.GetUserName(i))).ToList();
-            //for (int i = 0; i < numberOfPlayers; i++)
-            //{
-            //    players.Add(new Player(ConsoleIOManager.GetUserName(i)));
-            //}
+            int numberOfPlayers = ConsoleIOManager.GetNumberOfPlayers();           
+            for (int i = 0; i < numberOfPlayers; i++)
+            {
+                players.Add(new Player(ConsoleIOManager.GetUserName(i)));
+            }
 
             XmlManager.addPlayersToXml(players);
             players.ForEach(player => player.DrawCard(deck));
@@ -72,8 +67,9 @@
                     }
                     else
                     {
-                        actualPlayer.Score = 0;
                         Console.WriteLine($"{actualPlayer.Name}, вы выбыли из игры, ваш итоговый счет - {actualPlayer.Score}");
+                        actualPlayer.Score = 0;
+                       
                     }
 
                     actualPlayer.IsPlayerInGame = false;

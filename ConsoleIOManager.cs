@@ -24,22 +24,30 @@ public class ConsoleIOManager
         }
     }
 
-    // TODO: Нет валидации пользовательского ввода на символы кроме цифр.
+ 
     // Получение количества игроков
     public static int GetNumberOfPlayers()
     {
         while (true)
         {
             Console.WriteLine("Введите количество игроков");
-            int playersNumber = Convert.ToInt32(Console.ReadLine());
-            if (playersNumber > 10)
+            int playersNumber;
+            if (int.TryParse(Console.ReadLine(), out playersNumber))
             {
-                Console.WriteLine("Введите меньшее количество игроков");
+                if (playersNumber > 10)
+                {
+                    Console.WriteLine("Введите меньшее количество игроков");
+                }
+                else if (playersNumber == 0)
+                {
+                    Console.WriteLine("Введите ненулевое количество пользователей");
+                }
+                else
+                {
+                    return playersNumber;
+                }
             }
-            else
-            {
-                return playersNumber;
-            }
+            else Console.WriteLine("Введите целое число");
         }
     }
 
